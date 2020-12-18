@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '+#3#ttvgy(ukqidmiuaoi3!0%u(zj5q8icr943!f3%lh=qu1-r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['saunatracker.eu.pythonanywhere.com']
 
