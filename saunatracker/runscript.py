@@ -13,7 +13,8 @@ import urllib.request
 import time
 from bs4 import BeautifulSoup
 
-while True:
+for i in range(60):
+
     url = 'https://www.seebadenge.ch/wp/sauna'
     response = requests.get(url)
     print(response)
@@ -26,8 +27,6 @@ while True:
     for i in counter:
         if i.isnumeric():
             c_count += i
-
-    c_time = time.time()
 
     Track(count = c_count).save()
     time.sleep(600)
