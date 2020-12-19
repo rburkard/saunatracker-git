@@ -30,4 +30,4 @@ while True:
     c_time = time.time()
 
     Track(count = c_count).save()
-    time.sleep(1800)
+    time.sleep(600)
