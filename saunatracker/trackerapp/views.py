@@ -8,4 +8,15 @@ from .models import Track
 
 def index(request):
     output = Track.objects.all()
-    return HttpResponse(output)
+    res = []
+    for i in output:
+        observation = []
+        observation.append(i.count)
+        observation.append(i.date_time)
+        res.append(observation)
+
+    # format
+    finalstr = ""
+    for i in res:
+        finalstr += f"{i} \n"
+    return HttpResponse(finalstr)
