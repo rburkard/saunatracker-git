@@ -7,4 +7,5 @@ from .models import Track
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the trackerapp index.")
+    output = Track.objects.all()
+    return HttpResponse(output)
