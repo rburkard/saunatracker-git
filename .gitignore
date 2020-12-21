@@ -100,6 +100,7 @@ ENV/
 # mypy
 .mypy_cache/
 
+runscript-local.py
 .DS_Store
 *.sqlite3
 media/
