@@ -19,7 +19,9 @@ import pandas as pd
 df = pd.read_csv('sample_data.csv', parse_dates=['date'])
 
 df['time'] = pd.to_datetime(df['time'])
+df['time'] = df['time'].dt.time
 
+print(df['time'])
 df = df[(df['time'] >= pd.to_datetime('09:00:00')) & (df['time'] <= pd.to_datetime('19:00:00'))]
 
 ## Create correct dataframe, goal:

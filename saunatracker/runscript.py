@@ -27,6 +27,7 @@ while True:
     
     else:
         time.sleep(60)
+        continue
 
     url = 'https://www.seebadenge.ch/wp/sauna'
     response = requests.get(url)
