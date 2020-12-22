@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-# Create your views here.
+# Custom imports
 
 from .models import Track
 import pandas as pd
@@ -10,7 +10,6 @@ import datetime
 from dateutil.parser import parse 
 from dateutil.relativedelta import relativedelta
 import matplotlib as mpl
-import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
@@ -50,9 +49,15 @@ def index(request):
 
     plot_current_day_df = plot_current_day_df.groupby('hour').mean()
 
-    print(plot_current_day_df.head())
 
-    plt.plot(plot_current_day_df.index, plot_current_day_df.current_count)
+    """
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    ax.plot(plot_current_day_df.index, plot_current_day_df.current_count)
+
+    html1 = mpld3.fig_to_html(fig)
+    return HttpResponse(html1)
+    """
 
 
     ## Create past average df
@@ -65,9 +70,5 @@ def index(request):
 
     plot_average_df = plot_average_df.groupby('hour').mean()
 
-    print(plot_average_df.head())
-
-    plt.plot(plot_average_df.index, plot_average_df.current_count)
-
-    html = plot_current_day_df.to_html()
+    html = (plot_current_day_df.to_html(),plot_average_df.to_html()) 
     return HttpResponse(html)
