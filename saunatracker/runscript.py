@@ -30,5 +30,8 @@ if current_time.tm_hour >= 8 and current_time.tm_hour < 20:
         soup = BeautifulSoup(response.text, "html.parser")
         c_count = soup.findAll('span')[-3].text
 
-        print(c_count)
-        Track(count = c_count).save()
+        if isinstance(c_count, int):
+            print(c_count)
+            Track(count = c_count).save()
+        else:
+            print("Counter is not up")
