@@ -14,41 +14,45 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
+## graph by mpld3
+import matplotlib.pyplot as plt
+import mpld3
+from mpld3 import plugins
+
 
 def index(request):
     df = pd.DataFrame(list(Track.objects.all().values()))
 
+    df = df.rename(columns={"count": "current_count"})
 
     df['date_time'] = pd.to_datetime(df['date_time'])
-    df['time'] = df['date_time'].dt.time
-
+    df['time'] = df['date_time'].dt.strftime('%H:%M')
 
     ## Create correct dataframe, goal:
     # count # date # # time # weekday # hour # weeknumber
 
     df['weekday'] = [d.weekday() for d in df.date_time]
+    df['hour'] = [d.hour for d in df.date_time]
     df['weeknr'] = [d.isocalendar()[1] for d in df.date_time]
-    df['hour'] = [d.hour for d in df.time]
 
-    opening_time = datetime.datetime.strptime('09:00:00', '%H:%M:%S')
-
-    closing_time = datetime.datetime.strptime('19:00:00', '%H:%M:%S')
-
-    html = df.to_html()
-    return HttpResponse(html)
-
-
-    df = df[(df['time'] >= opening_time) & (df['time'] <= closing_time)]
+    # Only show opening times
+    df = df[(df['hour'] >= 9)&(df['hour'] < 19)] 
 
 
     ## Create today df
 
-    user_selection_day = 1
+    user_selection_day = 0
     current_week = datetime.date.today().isocalendar()[1]
 
     current_day_df = df[(df['weeknr'] == current_week) & (df['weekday'] == user_selection_day)]
 
-    plt.plot(current_day_df.hour, current_day_df.current_count)
+    plot_current_day_df = current_day_df[['current_count', 'hour']]
+
+    plot_current_day_df = plot_current_day_df.groupby('hour').mean()
+
+    print(plot_current_day_df.head())
+
+    plt.plot(plot_current_day_df.index, plot_current_day_df.current_count)
 
 
     ## Create past average df
@@ -57,8 +61,13 @@ def index(request):
     four_week_back = four_week_back.isocalendar()[1]
 
     average_df = df[(df['weeknr'] >= four_week_back) & (df['weekday'] == user_selection_day)]
-    average_df = average_df[['current_count', 'hour']]
-    average_df = average_df.groupby('hour').mean()
+    plot_average_df = average_df[['current_count', 'hour']]
 
-    plt.plot(average_df.index, average_df.current_count)
-    plt.show()
+    plot_average_df = plot_average_df.groupby('hour').mean()
+
+    print(plot_average_df.head())
+
+    plt.plot(plot_average_df.index, plot_average_df.current_count)
+
+    html = plot_current_day_df.to_html()
+    return HttpResponse(html)
