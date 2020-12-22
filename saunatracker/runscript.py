@@ -22,7 +22,6 @@ current_time = datetime.datetime.today().timetuple()
 
 # displaying the tuples of the object
 if current_time.tm_hour >= 8 and current_time.tm_hour < 20:
-    for i in range(4):
         url = 'https://www.seebadenge.ch/wp/sauna'
         response = requests.get(url)
         print(response)
@@ -33,4 +32,3 @@ if current_time.tm_hour >= 8 and current_time.tm_hour < 20:
 
         print(c_count)
         Track(count = c_count).save()
-        time.sleep(900)
