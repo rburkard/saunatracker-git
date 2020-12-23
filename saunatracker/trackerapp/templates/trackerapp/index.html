@@ -4,20 +4,16 @@
 
 {% block scripts %}
     <script>
-    $(document).ready(function(){
-        var today_dates = {{qs}}
-        var today_lables = today_dates[0]
-        var today_data = today_dates[1]
-        console.log(today_lables)
-        console.log(today_data)
+
+    function render_table(lables, user_selection_data) {
         var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: today_lables,
+                labels: lables,
                 datasets: [{
                     label: 'Free Spots',
-                    data: today_data,
+                    data: user_selection_data,
                     backgroundColor: [
                     ],
                     borderColor: [
@@ -29,16 +25,52 @@
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            min: 0,
+                            max: 35
                         }
                     }]
                 }
             }
         });
+        }
+
+
+
+    $(document).ready(function(){
+        lables = ['9 Uhr', '10 Uhr', '11 Uhr', '12 Uhr', '13 Uhr', '14 Uhr', '15 Uhr', '16 Uhr', '17 Uhr', '18 Uhr', '19 Uhr']
+        var average_dates = {{qs}}
+
+        var user_selection = $( "#weekday_selector" ).val();
+
+        user_selection = parseInt(user_selection, 10)
+        var user_selection_data = average_dates[user_selection]
+
+        console.log(user_selection_data)
+
+        render_table(lables, user_selection_data)
+
+        $('#weekday_selector').change(function(){
+            var user_selection = $( "#weekday_selector" ).val();
+            user_selection = parseInt(user_selection, 10)
+            var user_selection_data = average_dates[user_selection]
+            render_table(lables, user_selection_data)
+        });
+
+        
     });
     </script>
 {% endblock scripts %}
 
 {% block content %}
+    <label for="weekday">When do you want to sweat?:</label>
+    <select name="weekday" id="weekday_selector">
+        <option value="0" selected>Monday</option>
+        <option value="1">Tuesday</option>
+        <option value="2">Wednesday</option>
+        <option value="3">Thursday</option>
+        <option value="4">Friday</option>
+        <option value="5">Saturday</option>
+        <option value="6">Sunday</option>
+    </select>
     <canvas id="myChart" width="400" height="200"></canvas>
 {% endblock content %}

@@ -6,5 +6,4 @@ from trackerapp.views import ChartView
 urlpatterns = [
     path('', ChartView.as_view(), name = 'home'),
     path('admin/', admin.site.urls),
-    # path('trackerapp/', views.index),
 ]

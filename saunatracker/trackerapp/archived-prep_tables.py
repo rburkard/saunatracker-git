@@ -42,26 +42,29 @@ def get_average_dataset():
     four_week_back = datetime.date.today() + relativedelta(months=-1)
     four_week_back = four_week_back.isocalendar()[1]
 
-    average_df = df[(df['weeknr'] >= four_week_back)]
+    four_week_back = datetime.date.today() + relativedelta(months=-1)
+    four_week_back = four_week_back.isocalendar()[1]
 
-    average_df = average_df[['current_count', 'weekday', 'hour']]
+    average_df = df[(df['weeknr'] >= four_week_back) & (df['weekday'] == user_selection_day)]
+    plot_average_df = average_df[['current_count', 'hour']]
 
-    res = []
+    plot_average_df = plot_average_df.groupby('hour').mean()
 
-    ## Not clean: fix the data creation another time (filling up with zeroes)
-    for day in range(7):
-        temp_df = average_df[(average_df['weekday'] == day)]
-        temp_df = temp_df.groupby('hour').mean()
-        temp_df['current_count'] = temp_df['current_count'].round(1)
-        data = temp_df.iloc[:, 0].tolist()
-        if len(data) != 11:
-            fix_data = []
-            for i in range(11):
-                try:
-                    fix_data.append(data[i])
-                except IndexError:
-                    fix_data.extend([0])
-            res.append(fix_data)
-            continue
-        res.append(data)
+    plot_current_day_df['current_count'] = plot_current_day_df['current_count'].round(0)
+
+    labels = plot_current_day_df.index.tolist()
+    data = plot_current_day_df.iloc[:, 0].tolist()
+
+    res = [labels, data]
     return res
+
+def get_average_dataset():
+    ## Create past average df
+
+    four_week_back = datetime.date.today() + relativedelta(months=-1)
+    four_week_back = four_week_back.isocalendar()[1]
+
+    average_df = df[(df['weeknr'] >= four_week_back) & (df['weekday'] == user_selection_day)]
+    plot_average_df = average_df[['current_count', 'hour']]
+
+    plot_average_df = plot_average_df.groupby('hour').mean()
