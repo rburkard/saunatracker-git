@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}tracker data{% endblock title %}
+
+{% block scripts %}
+    <script>
+    $(document).ready(function(){
+        var today_dates = {{qs}}
+        var today_lables = today_dates[0]
+        var today_data = today_dates[1]
+        console.log(today_lables)
+        console.log(today_data)
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: today_lables,
+                datasets: [{
+                    label: 'Free Spots',
+                    data: today_data,
+                    backgroundColor: [
+                    ],
+                    borderColor: [
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    });
+    </script>
+{% endblock scripts %}
+
+{% block content %}
+    <canvas id="myChart" width="400" height="200"></canvas>
+{% endblock content %}
