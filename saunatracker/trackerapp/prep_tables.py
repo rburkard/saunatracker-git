@@ -58,6 +58,8 @@ def get_today_dataset():
 
     plot_average_df = plot_average_df.groupby('hour').mean()
 
+    plot_current_day_df['current_count'] = plot_current_day_df['current_count'].round(0)
+
     labels = plot_current_day_df.index.tolist()
     data = plot_current_day_df.iloc[:, 0].tolist()
 
